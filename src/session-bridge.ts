@@ -1496,7 +1496,6 @@ export class SessionBridgeManager {
         if (result.kind === "unavailable") throw new ConversationLockError(false)
         if (result.kind === "held") {
           hold = new LockHold([result.fd])
-          s.hold = hold
           releaseStart = hold.ref()
           newHold = true
         } else hold = undefined
@@ -1517,6 +1516,7 @@ export class SessionBridgeManager {
           throwIfStale()
         }
       }
+      if (newHold) s.hold = hold
 
       let disposedByBridge = false
       // Reuse the session's live proc when it survived a soft handoff reset
